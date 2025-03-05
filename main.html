@@ -5,37 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz App</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        .quiz-container {
-            max-width: 600px;
-            margin: auto;
-            padding: 20px;
-            border: 2px solid #000;
-            border-radius: 10px;
-        }
-        .question {
-            margin-bottom: 15px;
-        }
-        #submit {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        #submit:hover {
-            background-color: #45a049;
-        }
-        #score {
-            font-size: 18px;
-            margin-top: 15px;
-            font-weight: bold;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        .quiz-container { max-width: 600px; margin: auto; padding: 20px; border: 2px solid #000; border-radius: 10px; }
+        .question { margin-bottom: 15px; text-align: left; }
+        #submit { background-color: #4CAF50; color: white; padding: 10px 15px; border: none; cursor: pointer; font-size: 16px; }
+        #submit:hover { background-color: #45a049; }
+        #score { font-size: 18px; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -48,9 +23,9 @@
 
     <script>
         const quizData = [
+            { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
             { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: "4" },
             { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: "Mars" },
-            { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
             { question: "Which is the largest ocean?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: "Pacific" },
             { question: "What is the boiling point of water?", options: ["50°C", "100°C", "150°C", "200°C"], answer: "100°C" }
         ];
@@ -71,7 +46,7 @@
             questionDiv.classList.add("question");
 
             const questionText = document.createElement("p");
-            questionText.textContent = q.question;
+            questionText.textContent = `${index + 1}. ${q.question}`;
 
             questionDiv.appendChild(questionText);
 
