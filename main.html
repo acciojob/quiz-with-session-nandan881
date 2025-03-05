@@ -1,17 +1,128 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #000;
+            border-radius: 10px;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        #submit {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #submit:hover {
+            background-color: #45a049;
+        }
+        #score {
+            font-size: 18px;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Quiz</h1>
+        <div id="questions"></div>
+        <button id="submit">Submit</button>
+        <div id="score"></div>
+    </div>
 
-<html>
-  <head>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
+    <script>
+        const quizData = [
+            { question: "What is 2 + 2?", options: ["3", "4", "5", "6"], answer: "4" },
+            { question: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter", "Saturn"], answer: "Mars" },
+            { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
+            { question: "Which is the largest ocean?", options: ["Atlantic", "Indian", "Arctic", "Pacific"], answer: "Pacific" },
+            { question: "What is the boiling point of water?", options: ["50°C", "100°C", "150°C", "200°C"], answer: "100°C" }
+        ];
 
-  <body>
-    <!-- do not change this code -->
-    <h1>Quiz</h1>
-    <div id="questions"></div>
-    <button id="submit">Submit</button>
-    <div id="score"></div>
+        const questionsContainer = document.getElementById("questions");
+        const submitButton = document.getElementById("submit");
+        const scoreDisplay = document.getElementById("score");
 
-    <script type="text/javascript" src="./script.js"></script>
-  </body>
+        // Load previous score from local storage
+        const savedScore = localStorage.getItem("score");
+        if (savedScore) {
+            scoreDisplay.textContent = `Previous Score: ${savedScore} out of 5`;
+        }
+
+        // Generate quiz questions
+        quizData.forEach((q, index) => {
+            const questionDiv = document.createElement("div");
+            questionDiv.classList.add("question");
+            
+            const questionText = document.createElement("p");
+            questionText.textContent = `${index + 1}. ${q.question}`;
+            
+            questionDiv.appendChild(questionText);
+
+            // Create radio buttons
+            q.options.forEach(option => {
+                const label = document.createElement("label");
+                const input = document.createElement("input");
+                
+                input.type = "radio";
+                input.name = `question${index}`;
+                input.value = option;
+                
+                // Restore selection from session storage
+                const savedProgress = JSON.parse(sessionStorage.getItem("progress")) || {};
+                if (savedProgress[`question${index}`] === option) {
+                    input.checked = true;
+                }
+
+                // Store selection in session storage
+                input.addEventListener("change", () => {
+                    const progress = JSON.parse(sessionStorage.getItem("progress")) || {};
+                    progress[`question${index}`] = option;
+                    sessionStorage.setItem("progress", JSON.stringify(progress));
+                });
+
+                label.appendChild(input);
+                label.appendChild(document.createTextNode(option));
+                questionDiv.appendChild(label);
+                questionDiv.appendChild(document.createElement("br"));
+            });
+
+            questionsContainer.appendChild(questionDiv);
+        });
+
+        // Submit Button Functionality
+        submitButton.addEventListener("click", () => {
+            let score = 0;
+            const progress = JSON.parse(sessionStorage.getItem("progress")) || {};
+
+            quizData.forEach((q, index) => {
+                if (progress[`question${index}`] === q.answer) {
+                    score++;
+                }
+            });
+
+            // Display score
+            scoreDisplay.textContent = `Your score is ${score} out of 5.`;
+            
+            // Store score in local storage
+            localStorage.setItem("score", score);
+        });
+    </script>
+</body>
 </html>
