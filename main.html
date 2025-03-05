@@ -61,7 +61,7 @@
 
         // Load previous score from local storage
         const savedScore = localStorage.getItem("score");
-        if (savedScore) {
+        if (savedScore !== null) {
             scoreDisplay.textContent = `Previous Score: ${savedScore} out of 5`;
         }
 
@@ -69,21 +69,21 @@
         quizData.forEach((q, index) => {
             const questionDiv = document.createElement("div");
             questionDiv.classList.add("question");
-            
+
             const questionText = document.createElement("p");
             questionText.textContent = q.question;
-            
+
             questionDiv.appendChild(questionText);
 
             // Create radio buttons
             q.options.forEach(option => {
                 const label = document.createElement("label");
                 const input = document.createElement("input");
-                
+
                 input.type = "radio";
                 input.name = `question${index}`;
                 input.value = option;
-                
+
                 // Restore selection from session storage
                 const savedProgress = JSON.parse(sessionStorage.getItem("progress")) || {};
                 if (savedProgress[`question${index}`] === option) {
@@ -119,7 +119,7 @@
 
             // Display score
             scoreDisplay.textContent = `Your score is ${score} out of 5.`;
-            
+
             // Store score in local storage
             localStorage.setItem("score", score);
         });
